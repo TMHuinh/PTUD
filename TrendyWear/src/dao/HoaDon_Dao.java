@@ -200,17 +200,20 @@ public class HoaDon_Dao {
         ResultSet rs = null;
 
         try {
-            conn = ConnectDB.getConnection(); // Phương thức kết nối CSDL
-            String query = "SELECT * FROM HoaDon WHERE YEAR(ngayLap) = ? ORDER BY ngayLap DESC";
+            conn = ConnectDB.getConnection();
+            StringBuilder query = new StringBuilder("SELECT * FROM HoaDon WHERE YEAR(ngayLap) = ?");
 
-            // Nếu month khác -1, nghĩa là có tháng cụ thể
+            // Thêm điều kiện theo tháng nếu month != -1
             if (month != -1) {
-                query += " AND MONTH(ngayLap) = ?";
+                query.append(" AND MONTH(ngayLap) = ?");
             }
 
-            ps = conn.prepareStatement(query);
+            query.append(" ORDER BY ngayLap DESC");
+
+            ps = conn.prepareStatement(query.toString());
             ps.setInt(1, year);
 
+            // Nếu có tham số tháng, set giá trị cho month
             if (month != -1) {
                 ps.setInt(2, month);
             }
@@ -232,6 +235,16 @@ public class HoaDon_Dao {
             e.printStackTrace();
         } finally {
             ConnectDB.closeConnection(conn);
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return result;
