@@ -6,8 +6,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.jfree.chart.ChartFactory;
@@ -73,7 +75,7 @@ public class ThongKe extends javax.swing.JPanel {
                 hoaDon.getNhanVien().getTenNV(),
                 hoaDon.getKhachHang().getTenKH(),
                 hoaDon.getKhuyenMai(),
-                hoaDon.tinhTong(hoaDon.getMaHD())});
+                currencyFormatter.format(hoaDon.tinhTong(hoaDon.getMaHD()))});
         }
     }
 
@@ -268,4 +270,5 @@ public class ThongKe extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
     private TableModel modal;
     private DefaultTableModel dtm;
+    private NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
 }
